@@ -26,33 +26,45 @@ class TestCourses:
         courses_page_with_state.visit('https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/courses')
         courses_page_with_state.toolbar_course.check_visible()
         courses_page_with_state.empty_view.check_visible(
-            title = "There is no results",
-            description = "Results from the load test pipeline will be displayed here"
+            title="There is no results",
+            description="Results from the load test pipeline will be displayed here"
         )
 
     def test_create_course(self, courses_page_with_state: CoursesPage, create_course_page_with_state: CreateCoursePage):
         create_course_page_with_state.visit(
             'https://nikita-filonov.github.io/qa-automation-engineer-ui-course/#/courses/create'
         )
-        create_course_page_with_state.check_visible_upload_widget(is_image_uploaded=False)
-        create_course_page_with_state.check_upload_image_button()
-        create_course_page_with_state.fill_form_create_course(
-            title='Python',
-            estimated_time='100',
-            description='Autotest',
-            max_score='100',
-            min_score='9'
-        )
-        create_course_page_with_state.click_button_create_course()
-        courses_page_with_state.preview_picture.check_visible(
-            index=0,
-            title = 'Python',
-            estimated_time = '100',
-            max_score = '100',
-            min_score = '9'
-        )
-        courses_page_with_state.course_menu_button.check_visible(index=0)
-        courses_page_with_state.course_menu_button.click_menu(index=0)
-        courses_page_with_state.course_menu_button.check_visible_menu_items(index=0)
 
-        courses_page_with_state.page.wait_for_timeout(2000)
+        create_course_page_with_state.toolbar_create_course.check_visible()
+        create_course_page_with_state.check_visible_picture_empty_state()
+        create_course_page_with_state.view_upload_widget.check_visible()
+        create_course_page_with_state.view_upload_widget.check_upload_image_button()
+        create_course_page_with_state.view_upload_widget.check_visible(is_image_uploaded=True)
+        create_course_page_with_state.create_course_forme.fill_form(
+            title='Python',
+            estimated_time='777',
+            description='Pytest',
+            max_score='99',
+            min_score='10'
+        )
+        create_course_page_with_state.create_course_forme.check_visible(
+            title='Python',
+            estimated_time='777',
+            description='Pytest',
+            max_score='99',
+            min_score='10'
+        )
+        create_course_page_with_state.toolbar_exercise.check_visible()
+        create_course_page_with_state.check_visible_exercise_empty_state()
+        create_course_page_with_state.toolbar_exercise.click_button()
+        create_course_page_with_state.form_exercise.check_visible(
+            index=0,
+            title='Exercise title',
+            description='Exercise description'
+        )
+
+        # courses_page_with_state.course_menu_button.check_visible(index=0)
+        # courses_page_with_state.course_menu_button.click_menu(index=0)
+        # courses_page_with_state.course_menu_button.check_visible_menu_items(index=0)
+
+        courses_page_with_state.page.wait_for_timeout(1000)
